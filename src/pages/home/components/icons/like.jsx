@@ -1,4 +1,3 @@
-
 export const Like = () => {
   return (
     <div>

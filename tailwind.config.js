@@ -8,7 +8,6 @@ export default {
         screens: {
           lg: "1440px",
         },
-        padding: "40px",
       },
     },
   },

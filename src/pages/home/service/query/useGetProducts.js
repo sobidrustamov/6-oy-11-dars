@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { request } from "../../../../config/request";
 
-export const useGetBanners = () => {
+export const useGetProducts = (url) => {
   return useQuery({
-    queryKey: ["banner"],
+    queryKey: [`${url}`],
     queryFn: () => {
-      return request.get("/banner").then((res) => res.data);
+      return request.get(`/${url}`).then((res) => res.data);
     },
   });
 };

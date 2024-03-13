@@ -1,7 +1,10 @@
+import { useSelector } from "react-redux";
 
 export const Like = () => {
+  const { liked } = useSelector((state) => state.product);
+
   return (
-    <div>
+    <div className="relative">
       <svg
         width={24}
         height={24}
@@ -21,6 +24,9 @@ export const Like = () => {
           </clipPath>
         </defs>
       </svg>
+      <span className="w-[16px] h-[16px] inline-flex items-center rounded-full font-xs absolute bottom-4 justify-center text-[#fff] bg-red-500">
+        {liked?.length}
+      </span>
     </div>
   );
 };

@@ -7,7 +7,7 @@ import { SmatfonAndComputers } from "./components/smartfon-and-computer.jsx/smat
 import { Brand } from "./components/brand";
 import { Computers } from "./components/computers";
 
-export const Home = () => {
+const Home = () => {
   return (
     <div>
       <Banner />
@@ -35,3 +35,5 @@ export const Home = () => {
     </div>
   );
 };
+
+export default Home;

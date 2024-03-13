@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 export const ShoppingBag = () => {
-  const count = useSelector((state) => state.product.totalCount);
+  const {products} = useSelector((state) => state.product);
   return (
     <div className="relative">
       <svg
@@ -21,7 +21,7 @@ export const ShoppingBag = () => {
         />
       </svg>
       <span className="w-[16px] h-[16px] inline-flex items-center rounded-full font-xs absolute bottom-3 justify-center text-[#fff] bg-red-500">
-        {count}
+        {products.length}
       </span>
     </div>
   );

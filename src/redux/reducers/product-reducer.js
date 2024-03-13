@@ -27,7 +27,7 @@ const product = createSlice({
             {
               ...action.payload,
               userCount: 1,
-              userPrice: action.payload.price,
+              userPrice: action.payload.newPrice,
             },
           ],
           ids: [...state.ids, action.payload.id],
@@ -51,7 +51,7 @@ const product = createSlice({
             return {
               ...item,
               userCount: item.userCount + 1,
-              userPrice: (item.userCount + 1) * item.price,
+              userPrice: (item.userCount + 1) * item.newPrice,
             };
           }
           return item;
@@ -64,7 +64,7 @@ const product = createSlice({
             return {
               ...item,
               userCount: item.userCount - 1,
-              userPrice: (item.userCount - 1) * item.price,
+              userPrice: (item.userCount - 1) * item.newPrice,
             };
           }
           return item;
@@ -91,9 +91,22 @@ const product = createSlice({
     likedProduct: (state, action) => {
       return { ...state, liked: [...state.liked, action.payload] };
     },
+    unLikedProduct: (state, action) => {
+      return {
+        ...state,
+        liked: [...state?.liked.filter((item) => item.id !== action.payload.id)],
+      };
+    },
   },
 });
 
 export const productReducer = product.reducer;
-export const { addProduct, remove, toggleAnmount, totalCount, totalPrice,likedProduct } =
-  product.actions;
+export const {
+  addProduct,
+  remove,
+  toggleAnmount,
+  totalCount,
+  totalPrice,
+  likedProduct,
+  unLikedProduct,
+} = product.actions;

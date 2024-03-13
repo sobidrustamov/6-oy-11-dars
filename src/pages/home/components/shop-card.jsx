@@ -1,34 +1,53 @@
-import React, { useState } from "react";
+import React from "react";
 import { Like } from "./icons/like";
 import { ShoppingBag } from "./icons/shopping-bag";
-import { useDispatch } from "react-redux";
-import { addProduct } from "../../../redux/reducers/product-reducer";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addProduct,
+  unLikedProduct,
+} from "../../../redux/reducers/product-reducer";
 import { loadState } from "../../../config/storage";
 import { Eye } from "./icons/eye";
 import { likedProduct } from "../../../redux/reducers/product-reducer";
+import { Liked } from "./icons/liked";
+import { useNavigate } from "react-router-dom";
 
 export const Card = ({ title, price, newPrice, img, id }) => {
+  const { liked } = useSelector((state) => state.product);
+  const like = liked.find((item) => item.id === id);
+
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
-  const [cart, setCart] = useState(true);
   const product = loadState("product");
   const clicked = product?.ids.includes(id);
 
   const addPro = () => {
     dispatch(addProduct({ title, img, newPrice, id }));
-    setCart(!cart);
   };
   return (
     <div className="w-[214px] p-2">
       <div className="flex items-start">
         <img className="w-[165px] h-[165px]" src={img} alt="phone" />
-        <button
-          onClick={() => {
-            dispatch(likedProduct({ title, id }));
-          }}
-          className="mt-[50px]"
-        >
-          <Like />
-        </button>
+        {like ? (
+          <button
+            onClick={() => {
+              dispatch(unLikedProduct({ id }));
+            }}
+            className="mt-[50px]"
+          >
+            <Liked />
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              dispatch(likedProduct({ id }));
+            }}
+            className="mt-[50px]"
+          >
+            <Like />
+          </button>
+        )}
       </div>
       <div className="flex items-end justify-between">
         <div className="w-[80%]">
@@ -47,7 +66,7 @@ export const Card = ({ title, price, newPrice, img, id }) => {
           </button>
         ) : (
           <button
-            onClick={addPro}
+            onClick={() => navigate("/products/cart")}
             className="flex items-center justify-center w-[36px] h-[36px] bg-[#34ebeb]"
           >
             <Eye />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Logo } from "./img/logo";
 import { Tell } from "./icons/tell";
 import { MenuBar } from "./icons/menu-bar";
@@ -6,20 +6,35 @@ import { Search } from "./icons/search";
 import { User } from "./icons/user";
 import { Like } from "./icons/like";
 import { ShoppingBag } from "./icons/shopping-bag";
-import MyModal from "./components/register-modal";
 import UserModal from "./components/register-modal";
 import CotologModal from "./components/cotolog-modal";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useGetSearch } from "./service/useGetSearch";
 
 export const Header = () => {
   let [openProfile, setOpenProfile] = useState(false);
   let [openCotolog, setOpenCotolog] = useState(false);
+  const [searchText, setSearchText] = useState("");
+
+  const navigate = useNavigate();
+
+  const { data } = useGetSearch(searchText);
 
   const profile = () => {
     setOpenProfile(true);
   };
   const cotolog = () => {
     setOpenCotolog(true);
+  };
+
+  const handleSearchChange = (e) => {
+    console.log(e.target.value);
+    setSearchText(e.target.value);
+  };
+
+  const singleProduct = (id) => {
+    navigate(`/products/single/${id}`);
+    setSearchText("");
   };
 
   return (
@@ -55,16 +70,40 @@ export const Header = () => {
           >
             <MenuBar /> Каталог
           </button>
-          <form className="flex items-center p-3  border w-[673px]">
+          <form className="relative flex items-center p-3  border w-[673px]">
             <input
+              value={searchText}
               type="text"
               id="search"
               placeholder="Поиск"
               className="w-[620px] outline-none"
+              onChange={handleSearchChange}
             />
             <label htmlFor="search">
               <Search />
             </label>
+            <div
+              className={`${
+                searchText?.length < 4 ? "hidden" : ""
+              } absolute top-[100%] left-0 p-2 z-50 bg-white w-full border overflow-y-scroll max-h-[500px]`}
+            >
+              {data?.map((product, i) => (
+                <div
+                  key={i}
+                  onClick={() => singleProduct(product.id)}
+                  className="flex gap-4 border p-3 justify-between"
+                >
+                  <div className="flex gap-4 items-center">
+                    <img className="w-[100px]" src={product.img} alt="" />
+                    <div className="">
+                      <h2 className="font-medium text-[24px] mb-3">
+                        {product.title}
+                      </h2>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </form>
         </div>
         <ul className="flex gap-[32px]">
@@ -81,7 +120,12 @@ export const Header = () => {
             </button>
           </li>
           <li>
-            <button className="flex flex-col items-center">
+            <button
+              onClick={() => {
+                navigate("/products/cart");
+              }}
+              className="flex flex-col items-center"
+            >
               <ShoppingBag />
               Корзина
             </button>
